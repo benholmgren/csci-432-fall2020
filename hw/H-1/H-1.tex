@@ -45,7 +45,13 @@ Answer the following questions:
 
 % ============================================
 	\begin{enumerate}
-		\item I always have a hard time with this. 
+		\item Growing up in Bozeman, being in the outdoors has always been an important
+			part of my life, and in particular I love to spend my time trail running
+			and climbing rock and ice. I am also fascinated by the intersection of pure
+			mathematics and computation, and when not outdoors spend the majority of my
+			time on problems in this realm. There is nothing better in my opinion than
+			watching oneself improve at a desired task, and I certainly hope that my life
+			will always be a story of growth- especially in these two important facets.
 
 	    	\item Probably computational topology, of course. Either that or CS theory.
 		I really like a lot of theory, and both of these classes provided that.
@@ -145,7 +151,16 @@ Please do the following:
 
 When I was a junior in highschool, I took was in an AP US history class. I ended up 
 getting a perfect score on the first exam, and I had scored much higher than most people
-in the class. I was sitting next to the
+in the class. I was sitting next to a few people who were clearly struggling in the class,
+and were also the pretty obvious ``popular" kids in highschool. Pretty quickly I was getting 
+asked always for answers to tests and quizzes and homework, and had to deal often with the
+feeling of wandering eyes on my paper. More than anything, it was just a major pain. This carried
+on for a bit, but I tried to just ignore it and eventually moved seats. I was a little annoyed that
+people weren't earning their test answers, but more than anything was just underwhelmed and disappointed
+with the laziness of people. But life goes on, and life went on. I think that academic dishonesty
+is just generally pretty stupid because you don't get anything out of the class- which is the entire
+point of being there. So I guess that's my big takeaway, and luckily it hasn't really been a part of my life
+since that point in time.
 
 % ============================================
 
@@ -158,8 +173,27 @@ exactly $n-1$ edges.
 \paragraph{Answer}
 
 % ============================================
+\begin{theorem} Every tree with one or more nodes/vertices has
+exactly $n-1$ edges.
+\end{theorem}
+\begin{proof}
+	Let $T$ be a tree with $n=1$ vertices as a base case. Then, $T$ most definitely has exactly $n-1=0$ 
+	edges, since a tree by definition is an acyclic graph in which any two vertices are connected with exactly one path.
+	Since $T$ has only one vertex, $T$ then must have zero edges to fit the definition of a tree, since all 
+	vertices in $T$ must be connected (which occurs trivially), and $T$ must be acyclic, so no self loops may occur.
 
-TODO: your answer goes between these lines
+	Now let $T$ be a tree with $n=k$ vertices for some $k>1$. Assume that that the theorem holds for a tree with $k-1$ vertices.
+	We need to show that the theorem holds for a tree on $k$ vertices.
+
+	Choose any degree 1 vertex $v$. Let a graph $T'$ be the graph resulting from the removal of $v$ and its single connected
+	edge, $e$. $T'$ must also be an acyclic, fully connected graph, since all we've done is remove one vertex and its single
+	corresponding edge on the very periphery of $T$. Meaning that $T'$ must also be a tree with $k-1$ vertices. Then as a 
+	result, $T'$ has $k-2$ edges by the inductive hypothesis. Which means that $T$ is a tree with $(k-2) + 1 = k - 1$ edges. 
+	
+	Because the base case and inductive hypothesis hold, the theorem is proven by induction.
+
+
+\end{proof}
 
 % ============================================
 
@@ -173,7 +207,23 @@ $O(n^2)$.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{theorem}
+	$f(x)=n^2 + 3n +2$ is $O(n^2)$.
+\end{theorem}
+\begin{proof}
+	Recall that by definition, $f(x) = O(g(x))$ if there exists a positive real number $K$ and a real number $x_0$
+	such that
+
+	$|f(x)|\leq K g(x)$ for all $x \geq x_0$.
+
+	Let $f(x)=n^2 + 3n + 2$ and $g(x) = n^2$.
+
+	Consider $K=6$ and $x_0=1$. For $x=x_0$, $f(x)=6=K(g(x))$. For all $x > x_0$ then, $f(x) \leq K g(x)$, which may
+	be shown graphically. 
+
+	Therefore, by the definition of big-O notation, $f(x)=n^2 + 3n + 2$ is $O(n^2)$.
+
+\end{proof}
 
 % ============================================
 
@@ -192,7 +242,9 @@ Consider the \textsc{RightAngle} algorithm on page 8 of the textbook.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item
+\end{enumerate}
 
 % ============================================
 
