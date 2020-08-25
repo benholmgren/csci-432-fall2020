@@ -243,7 +243,28 @@ Consider the \textsc{RightAngle} algorithm on page 8 of the textbook.
 % ============================================
 
 \begin{enumerate}
-	\item
+	\item This algorithm considers the following problem: ``If we have four
+		distinct points $A,B,C,D$, $|AB|$ being our unit of measure, what is
+		the product of $|AC|$ and $|AD|$?" The algorithm solves this problem by
+		constructing a point $Z$ such that $|AZ|$ fits this criteria that 
+		$|AZ|= |AC||AD|/|AB|$. Effectively, the algorithm thus is able to compute multiplication 
+		using geometry.
+	\item Claim: The while loop terminates
+		\begin{proof}
+			Constructing a perpendicular line to a line passing through some given point is by design
+			a constant time operation, occuring based on the intersections of various lines and circles,
+			which are determined using a compass and straightedge. This construction necessarily only performs
+			a constant number of operations (3) each and every time the rightangle algorithm runs.
+
+			Furthermore, computing the intersection of any combination of circles and lines must also be a constant
+			time operation, because it should never change exponentially based on any given input. Computing 
+			intersections is as simple as utilizing a compass and a straightedge for an unvarying number of steps.
+
+			Thus, because the algorithm consists only of steps which either compute intersections or right angles,
+			the algorithm consists entirely of constant time operations. There are no loops in the algorithm, only
+			a finite series of calls to two constant time procedures. Thus, the algorithm \textsc{MultiplyOrDivide} terminates.
+			
+		\end{proof}
 \end{enumerate}
 
 % ============================================
