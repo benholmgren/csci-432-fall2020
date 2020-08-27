@@ -218,8 +218,9 @@ $O(n^2)$.
 
 	Let $f(x)=n^2 + 3n + 2$ and $g(x) = n^2$.
 
-	Consider $K=6$ and $x_0=1$. For $x=x_0$, $f(x)=6=K(g(x))$. For all $x > x_0$ then, $f(x) \leq K g(x)$, which may
-	be shown graphically. 
+	Consider $K=6$ and $x_0=1$. For $x=x_0$, $f(x)=6=K(g(x))$. For all $x > x_0$ then, $f(x) \leq K g(x)$, 
+	since $n^2 + 3n + 2 \leq 6n^2$ for every $n>1$. If verification of this claim is needed, I suggest
+	consulting graphing software, where this can be quickly shown.
 
 	Therefore, by the definition of big-O notation, $f(x)=n^2 + 3n + 2$ is $O(n^2)$.
 
@@ -243,27 +244,43 @@ Consider the \textsc{RightAngle} algorithm on page 8 of the textbook.
 % ============================================
 
 \begin{enumerate}
-	\item This algorithm considers the following problem: ``If we have four
-		distinct points $A,B,C,D$, $|AB|$ being our unit of measure, what is
-		the product of $|AC|$ and $|AD|$?" The algorithm solves this problem by
-		constructing a point $Z$ such that $|AZ|$ fits this criteria that 
-		$|AZ|= |AC||AD|/|AB|$. Effectively, the algorithm thus is able to compute multiplication 
-		using geometry.
+	\item The \textsc{RightAngle} algorithm on page 8 finds the line perpendicular to a given line which 
+		also passes through a specified point. So, the problem that this algorithm
+		solves can be thought of as, ``If we have a line and any point, what is the line
+		which both goes through this point and is perpendicular to the original line?"
 	\item Claim: The while loop terminates
 		\begin{proof}
-			Constructing a perpendicular line to a line passing through some given point is by design
-			a constant time operation, occuring based on the intersections of various lines and circles,
-			which are determined using a compass and straightedge. This construction necessarily only performs
-			a constant number of operations (3) each and every time the rightangle algorithm runs.
+			Somewhat by design, this algorithm must terminate. We can verify this claim by
+			examining \textsc{RightAngle} line by line.
 
-			Furthermore, computing the intersection of any combination of circles and lines must also be a constant
-			time operation, because it should never change exponentially based on any given input. Computing 
-			intersections is as simple as utilizing a compass and a straightedge for an unvarying number of steps.
+			To begin, line 1 of the algorithm chooses any point on our input line. Certainly
+			this is a constant time operation, not asymptotically dependent on the input
+			because it will just simply choose any point on one piece of data which we've been given
+			(the line).
 
-			Thus, because the algorithm consists only of steps which either compute intersections or right angles,
-			the algorithm consists entirely of constant time operations. There are no loops in the algorithm, only
-			a finite series of calls to two constant time procedures. Thus, the algorithm \textsc{MultiplyOrDivide} terminates.
+			Then, line 2 of the algorithm generates a circle centered at the arbitrary point chosen in
+			line 1 with a radius extending to the point $P$ given as input. This is a constant time operation,
+			since there is always a single step in this process, no matter which points are used for any call to
+			the function. After this, line 2 finds the intersection of the input line and this circle, which is
+			also a single-step, constant time operation which doesn't change asymptotically based on any input.
+			This intersection is stored in a segment $AB$, which runs from each intersection point between the line 
+			and the circle. This is also a constant time operation, with a fixed amount of
+			steps asymptotically independent of input. Making line 2 occur in constant time, with what we 
+			can think of as three constant time steps.
 			
+			Next, line 3 similarly generates two circles, one centered at point $A$ and extending to $B$, and one
+			centered at point $B$ and extending to $A$. Just as before, generating these two circles occurs in constant
+			time. Then another segment is constructed between the two points resulting from the intersection of these
+			circles. For the same reasons as above, this is a constant time operation. Meaning that line 3 occurs in 4
+			constant time steps (making two circles, finding their intersection, storing this in a segment), 
+			and therefore also happens in constant time.
+
+			Lastly, line 4 of the algorithm returns the segment stored in line 3. Which is one step, regardless of the input
+			of the function, making it occur in constant time as well.
+
+			Therefore, since every line of the algorithm contains only constant time operations, and there are finitely
+			many lines in the algorithm, the algorithm terminates- and in fact does so in constant time.
+
 		\end{proof}
 \end{enumerate}
 
@@ -298,7 +315,7 @@ an even number.
 	\item The converse of this statement is ``If $ab$ is an even number, then $a$ and $b$ are both 
 		even numbers."
 	\item Recalling the definition of even, if $a$ and $b$ are both even numbers, $a=2k_a$ and $b=2k_b$
-		some integers $k_a$ and $k_b$. This means that $ab = (2k_a)(2k_b)$. Then, $ab=2(2k_{a}k_{b})$.
+		for some integers $k_a$ and $k_b$. This means that $ab = (2k_a)(2k_b)$. Then, $ab=2(2k_{a}k_{b})$.
 		Letting $2k_{a}k_{b}=k$, there must exist an integer fulfilling the definition that
 		$ab$ is even, since for the integer $k$ defined above, $ab=2k$. Thus, if $a$ and $b$ are both 
 		even numbers, we've shown that $ab$ must also be an even number by the definition of even.
