@@ -1,11 +1,11 @@
 \documentclass{article}
 \usepackage{../fasy-hw}
-\usepackage{ wasysym }
+\usepackage{ wasysym}
 
 %% UPDATE these variables:
 \renewcommand{\hwnum}{2}
 \title{Advanced Algorithms, Homework 1}
-\author{TODO-Group Member Names Here}
+\author{Ben Holmgren}
 \collab{n/a}
 \date{due: 3 September 2020}
 
@@ -43,7 +43,106 @@ to weigh in on how we choose them!
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item As input, the group choosing problem consists of a set of
+		students, each with unique ability levels and interests. 
+		Inevitably, a wide range of ability levels will exist, and
+		ability levels can be difficult to measure. (Grades and performances
+		on specific assignments may be somewhat arbitrary and may not
+		fully reflect a student's knowledge in a specific subject.) 
+		However, a student's interest in different subject areas is 
+		perhaps a more useful metric to keep in mind when determining 
+		groups, since this may be determined fairly explicitly in a 
+		survey kind of environment. It is my conjecture then also that group
+		satisfaction in the end will be more likely optimized given interest
+		in any particular subject as the main metric for assigning groups.
+		Furthermore, we also have some value for group sizes as an input.
+		Interestingly, half of our input (the set of students) has free
+		will. A property that we can utilize to do relatively little work
+		in the end in our algorithm.
+
+		As output, we expect to have a number of groups such that each
+		group is of the desired group size (with potential exceptions for
+		remainders, in which case groups may have no more than 1 extra member)
+		and each group is comprised of students with some level of interest
+		in the topic area that group will pursue.
+
+	\item Algorithmically, I propose using the interests of students as the primary
+		force in assigning groups. A way to go about this 
+		could be to open subject area proposals on a group forum.
+		To start, anyone interested in a particular area could register
+		this subject in the forum, or students could join in with already
+		registered subject area ideas. If $S$ is the number of students in the 
+		class and $k$ is the desired group size, cap each group's size at $k+1$,
+		and then the next task will be to
+		limit the number of total groups to $floor(S/k)$. Letting $n_0$ be the number
+		of initial groups, force group members from the smallest $(n_0 - floor(S/k))$
+		groups to join the largest $floor(S/k)$ groups.
+	\item More formally, this algorithm can be presented as follows:
+
+		\begin{algorithm}
+			\caption{\textsc{GroupChooser}}
+			\begin{algorithmic}[1]
+				\Require A set $C$ of students with free will, desired group size $k$
+				\Ensure A set of $k$ groups of students $G$, each of size $k$ or $k+1$
+				\State $G \gets \emptyset$
+				\For {student $\in C$}
+					\State $i \gets 0$
+					\State $j \gets |G|$
+					\If{$g_0 \in G$ is interesting to the student}
+						\State student $\in g_0$
+					\EndIf
+					\While{$g_i$ is uninteresting to the student \&\& $(i + 1) \leq k$ }
+						\If {$g_{i+1}$ is interesting to the student \&\& $|g_{i+1}| < k$}
+							\State student $\in g_{i+1}$
+						\EndIf
+						\State $i++$
+					\EndWhile
+					\State create $g_j \in G$
+					\State student $\in g_j$
+				\EndFor
+				\State \textsc{Sort($G$)} (with smallest group at index 0, to largest group)
+				\State $i \gets 0$
+				\While {$i < (|G| - floor|C|/k)$}
+					\For{student $\in g_i$}
+						\State $j \gets (|G|-floor|C|/k)$
+						\For{$g_j \in G$}
+							\If{$g_j$ is most interesting remaining group for student}
+								\State student $\in g_j$
+								\State $j++$
+							\EndIf
+						\EndFor
+						\State $i++$
+					\EndFor
+					\State $G \gets G/g_i$ such that $i < (|G| - floor|C|/k)$ for all integers $i \geq 0$
+				\EndWhile
+				\State Return $G$
+			\end{algorithmic}
+		\end{algorithm}
+
+	\item \textsc{GroupChooser} terminates.
+		\begin{proof}
+			Let there be $n$ students in $C$.
+			Lines 2 through 16 iterate through all $n$ students in the class. Embedded in these lines
+			are all constant time operations, with the exception of a while loop, which may at most
+			iterate $n$ times if every student creates their own group. Causing the first 16 lines to
+			operate in $O(n^2)$ time.
+
+			Line 17 sorts each group from smallest to largest, a step which occurs in $O(nlogn)$ time.
+
+			Lastly, lines 19 through 31 comprise a  while loop, which may also at most iterate $n$ times.
+			Within this loop, it is possible that every student will be iterated over in the embedded
+			for loop, and then within this for loop it is posible that every group may be iterated
+			over, which is also an order of $n$ operation. All other steps within this highest level
+			while loop all are constant time operations. Leaving lines 19 through 31 to operate in
+			$O(n^3)$ time.
+
+			The only lines we have yet to consider are thus lines 1, 18, and 32, which all are
+			constant time operations. Thus, the runtime of \textsc{GroupChooser} is
+			$O(n^2) + O(nlogn) + O(n^3) = O(n^3)$. And, since we've shown a runtime, we've proven
+			that \textsc{GroupChooser} terminates.
+		\end{proof}
+\end{enumerate}
 
 % ============================================
 
@@ -65,8 +164,127 @@ Chapter 1, Problem 37 (Largest Complete Subtree).
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item Problem Description:
 
+		If we're given a binary tree as an input with any number of nodes and binary branching structure,
+		we want to give the largest complete subtree as output. More specifically, our input includes a
+		set of nodes, each with links to their children, and each node also carries with it an attached
+		and initially empty value for depth. As for our output, recalling the definition of the largest
+		complete subtree, we want to output the largest possible connected subgraph of our
+		binary tree such that every node has two children, with the exception of the leaves which all must
+		have the same depth within the binary tree. This output will be in the form of the node at which
+		the largest complete subtree begins, and an integer value for the depth of this largest complete
+		subtree.
+
+	\item I propose an algorithm \textsc{LargestCompleteSubtree} which will iterate through every node in 
+		the given tree, and at every node will execute a recursive subalgorithm \textsc{RecursiveDepth}, 
+		whose input will be the current node and then a depth value beginning at zero. If the node
+		inputted to \textsc{RecursiveDepth} has no connected children, then \textsc{RecursiveDepth}
+		stores the current depth value in a list provided on input. 
+		Otherwise, \textsc{RecursiveDepth} adds one to the depth value, 
+		and recurses on itself with each child node of the current node as input
+		alongside the newly updated depth value and the most recent list of depths. 
+		Eventually, the every node in this recursion will store its depth in the list, 
+		and then we may calculate the depth value of the largest complete subtree
+		of the current node in our original for loop in \textsc{LargestCompleteSubtree} by finding
+		the minimal depth recorded in the list at a terminal node. (We know we can guarantee at least this
+		depth for every other terminal node in the subtree). We assign this minimal
+		depth value to the depth value associated with the current node. After every node has computed its
+		largest complete subtree, we iterate through every node and locate the node with the maximum depth
+		associated with its largest complete subtree, and we return this maximal node- carrying with it a
+		value for the depth of its largest complete subtree.
+	\item \begin{algorithm}
+			\caption{\textsc{LargestCompleteSubtree}}
+			\begin{algorithmic}[1]
+				\Require{A binary tree $T$ containing a set of nodes with links to each of their children and an empty depth value}
+				\Ensure{A node which is the start of the largest complete subtree in $T$, and with it its associated depth value}
+				\State depthlist $\gets \emptyset$
+				\For{each node $\in T$}
+					\State \textsc{RecursiveDepth}(node, 0, depthlist)
+				\EndFor
+				\State max $\gets 0$
+				\State MaxNode $\gets \emptyset$
+				\For{each node $\in T$}
+					\If{node.depth $\geq$ max}
+						\State MaxNode $\gets$ node
+					\EndIf
+				\EndFor
+				\State \Return MaxNode (with Maxnode.depth = depth of largest complete subtree)
+			\end{algorithmic}		
+	\end{algorithm}
+
+	\begin{algorithm}
+		\caption{\textsc{RecursiveDepth}}
+		\begin{algorithmic}[1]
+			\Require{node $\in T$, depth, depthlist}
+			\Ensure{depth value of largest complete subtree of input node}
+			\If{node.children $= \emptyset$}
+				\State depthlist.add(depth)
+			\EndIf
+			\If{node.children $\not= \emptyset$}
+				\State Child1 $\gets$ node.left
+				\State Child2 $\gets$ node.right
+				\State depth += 1
+				\State \textsc{RecursiveDepth(Child1, depth, depthlist)}
+				\State \textsc{RecursiveDepth(Child2, depth, depthlist)}
+			\EndIf
+			\State mindepth $\gets$ depthlist[0]
+			\For {each depth $\in$ depthlist}
+				\If{depth $<$ maxdepth}
+					\State mindepth $\gets$ depth
+				\EndIf
+			\EndFor
+			\State \Return mindepth
+		\end{algorithmic}
+	\end{algorithm}
+
+\item \textsc{LargestCompleteSubtree} runs in $O(n^2)$ time, where $n$ is the number of nodes in the
+	provided binary tree.
+	\begin{proof}
+		The for loop in lines 2 through 4 completes $n$ operations, each of which call 
+		\textsc{RecursiveDepth}. \textsc{RecursiveDepth} at most passes through every node
+		in the tree. After this is accomplished, \textsc{RecursiveDepth} iterates through
+		every depth recorded in the list of depths (which are recorded at each leaf in the tree), 
+		which could also be at most an order of $n$ operation. Meaning that 
+		\textsc{RecursiveDepth} runs in $O(2n)$ time, and must terminate once every node called has 
+		no children (which is a guarantee in a finite binary tree), if we keep moving to new child nodes.
+		This makes lines 2 through 4 of \textsc{LargestCompleteSubtree} occur in $O(n*2n) = O(n^2)$ time.
+		After this the only other loop in \textsc{LargestCompleteSubtree} occurs in lines 7 through 16,
+		which conducts order of $n$ constant time operations. Outside of these two loops, only constant
+		time operations are conducted. Making \textsc{LargestCompleteSubtree} run in $O(n^2+n)=O(n^2)$ time.
+	\end{proof}
+\item \textsc{LargestCompleteSubtree} Returns the largest complete subtree contained in the provided binary tree $T$
+	in the form of the node where the largest complete subtree begins, and the depth of this largest complete
+	subtree.
+	\begin{proof}
+		Begin by considering that at every node, we seek to recursively compute the largest complete
+		subtree at that node. If indeed we compute the largest complete subtree at every node, then we
+		should certainly be capable of returning the largest overall complete subtree in the desired
+		format. Then, at every node, consider that we compute the largest complete subtree by checking
+		whether or not that node has children. If the node has children, we recursively keep moving down
+		the tree (starting with recursions on the leftmost child at every node), until the node we reach
+		has no children. At this terminal node, we record the depth we reach in a list, which is continually
+		passed through the recursion. We can be sure that the list records the depth at every terminal node
+		branching from our original node because there is order in the way recording occurs, as the list
+		is updated moving from left to right and values must be carried from left to right in the recursion.
+		The earliest changes in the list must be traceable to the leftmost terminal node, and any change 
+		to the list thereafter happens in a routine called after the initial change to the list 
+		(when the right child is called), so our data is preserved in the list for the depth of every
+		terminal node. Then, we can simply choose the shallowest terminal node (because we can guarantee
+		that there is a node on this level throughout the rest of the subtree) to attain our largest
+		complete subtree for any given original node. We return this in the form of a depth integer
+		value which is then stored alongside the original node. Afterwards, simply iterating through
+		every node and determining which node has the largest accompanying depth value of its subtree
+		provides the overall largest complete subtree for the entire binary tree. As a result, we can
+		guarantee that \textsc{LargestCompleteSubtree} does indeed provide the largest complete subtree
+		in the specified output format upon a desired input, since we can verify that we correctly compute
+		the largest complete subtree for any given node in the graph, and then return the largest complete
+		subtree when examining every node.
+	\end{proof}
+
+
+\end{enumerate}
 % ============================================
 
 
@@ -77,6 +295,161 @@ Chapter 1, Problem 9 (Pancakes). When describing your algorithm, please give a
 prose explanation (in paragraph form) as well as in the algorithm environment.
 To "Pass", we expect and answer to (a) and (b).  To earn a "high pass" on this
 question, you must answer (c) as well.
+
+\paragraph{answer}
+\begin{enumerate}[a]
+	\item
+	Let our stack of pancakes have size rankings 1 through $n$, randomly distributed
+	throughout the stack. If we only have $n=1$ pancake, we know we don't have to do
+	anything, our stack is already sorted. If we have $n=2$ pancakes, we can sort the
+	stack in only one flip, simply by flipping the stack so that the largest pancake is
+	on the bottom if it isn't already. If we have $n \geq 3$ pancakes, then we will locate
+	the largest pancake in the stack, flip every pancake ranging from the top of the stack to the
+	largest pancake so that the largest pancake is on top, and then flip the entire stack so that the
+	largest pancake is on the bottom of the stack. Then, we will recursively recall the algorithm
+	with $n-1$ pancakes, no longer considering the bottom-most sorted region of the stack. After all
+	of our recursions are complete, we should have a fully sorted stack of pancakes with largest on the
+	bottom, smallest on the top.
+
+
+	\begin{algorithm}
+		\caption{\textsc{PancakeSort}}
+		\begin{algorithmic}[1]
+			\Require A list $l_n$ of $n$ pancakes ranging from 1 to $n$ in their index in the list, in any order based on size
+			\Ensure A sorted list of $n$ pancakes with largest on the bottom, smallest on top
+			\If{$n=1$}
+				\State \Return $l_n$
+			\EndIf
+			\If{$n=2$}
+				\If{pancakes sorted}
+					\State \Return $l_n$
+				\Else
+					\State flip $l_n$
+					\State \Return $l_n$
+				\EndIf
+
+			\EndIf
+			\If{$n\geq 3$}
+				\State find largest pancake at index $k$
+				\State flip 1st through $kth$ elements
+				\State flip entire stack
+				\State $l_{n-1} \gets (l_n - nth$ element) (list discluding largest pancake, now at the bottom of the stack)
+				\State \textsc{PancakeSort}($l_{n-1}$)
+			\EndIf
+		\end{algorithmic}
+	\end{algorithm}
+
+
+	Letting $T(n)$ be the number of flips our algorithm uses to sort a stack of $n$ pancakes, we know that
+		$T(n) = 0$ if $n=1$, $T(n)\leq1$ if $n=2$, and $T(n)\leq 2+ T(n-1)$ for $n \geq 3$. So I guess if
+		we wanted to think about exactly how many flips would occur in the worst case, it'd be roughly 
+		$2n$, if somehow we both needed two flips in every case to get the largest current pancake to the 
+		bottom of the stack, and then one additional flip when we only had two pancakes remaining.
+\item For every positive integer $n$, we can think of a stack that needs at least $n$ flips to sort by considering
+	a stack with the largest pancake directly in the middle of the stack, and then the smallest two pancakes on 
+		either side of it, and then the next smallest pancake above the smallest pancake on each side, and
+		then so on until the next largest pancakes apart from the pancake in the middle are the furthest
+		outside. For example, a stack of 5 pancakes ranging from size 1 to 5 would have the configuration
+		\{3,1,5,2,4\}, where 3 is on top and 4 is on the bottom to begin. Then, we verifiably need a 
+		porportional to linear number of flips for any $n$, because in having the largest value in the
+		middle, and next largest values on the extremities of the stack, we are forcing distance between
+		the current largest value at any moment and the next largest value. In doing so, we are causing
+		a large number of flips, which if not occuring for every value twice must at least occur for every
+		value in the stack once. Since a flip must occur in general for a value at least once, we know we
+		have something that is porportional to $n$ flips in the best case.
+	\item For this extension of the problem, we can do something quite similar to the technique used before.
+		This time, whenever we flip the largest pancake to the top of the stack, we can also just verify
+		that the burned side is facing up, so that upon flipping the entire stack, the pancake's burned side
+		will be facing down.
+		When the base cases are reached, if there is only one remaining pancake, we simply flip it if the
+		burned side is up. For two remaining pancakes, we first make sure the stack is sorted, flipping it if it isn't,
+		and then if both pancakes are burnt we flip the stack again, flipping the largest burned pancake, flip the stack
+		so that it's in order again, and then flip the smallest burnt pancake on top. If the bottom pancake is the only
+		one burnt, we flip the stack, flip the pancake, and flip the stack again. If the top pancake is the only one burnt
+		then we just flip the top pancake. Otherwise, if no pancakes are burnt, we return the stack as is.
+
+		
+	\begin{algorithm}
+		\caption{\textsc{BurnedPancakeSort}}
+		\begin{algorithmic}[1]
+			\Require A list $l_n$ of $n$ pancakes ranging from 1 to $n$ in their index in the list, in any order based on size, with one side of each pancake burned
+			\Ensure A sorted list of $n$ pancakes with largest on the bottom, smallest on top, and burned sides of every pancake facing down
+			\If{$n=1$}
+				\If{burned side is up}
+					\State flip the one pancake in $l_n$
+					\State \Return $l_n$
+				\Else
+					\State \Return $l_n$ as is
+				\EndIf
+			\EndIf
+			\If{$n=2$}
+				\If{pancakes sorted}
+					\If{top and bottom pancakes both have burn side up}
+                                        \State flip stack
+					\State flip top pancake
+                                        \State flip stack
+                                        \State flip top pancake
+                                        \State \Return $l_n$
+					\EndIf
+
+					\If{just bottom pancake has burn side up}
+					\State flip stack
+					\State flip top pancake
+					\State flip stack
+					\State \Return $l_n$
+					\EndIf
+					\If{just top pancake has burn side up}
+					\State flip top pancake
+					\State \Return $l_n$
+					\EndIf
+					\State \Return $l_n$
+				\Else
+					\State flip $l_n$
+					\If{top and bottom pancakes both have burn side up}
+                                        \State flip stack
+                                        \State flip top pancake
+                                        \State flip stack
+                                        \State flip top pancake
+                                        \State \Return $l_n$
+                                        \EndIf
+					\If{just bottom pancake has burn side up}
+                                        \State flip stack
+                                        \State flip top pancake
+                                        \State flip stack
+                                        \State \Return $l_n$
+                                        \EndIf
+                                        \If{just top pancake has burn side up}
+                                        \State flip top pancake
+                                        \State \Return $l_n$
+                                        \EndIf
+                                        \State \Return $l_n$
+
+				\EndIf
+
+			\EndIf
+		\end{algorithmic}
+	\end{algorithm}
+	\begin{algorithm}
+		\caption{Part 2 of the algorithm (beginning at line 51)}
+		\begin{algorithmic}[1]
+			\If{$n\geq 3$}
+				\State find largest pancake at index $k$
+				\State flip 1st through $kth$ elements
+				\If{top element has burned side down}
+					\State flip top pancake
+				\EndIf
+				\State flip entire stack
+				\State $l_{n-1} \gets (l_n - nth$ element) (list discluding largest pancake, now at the bottom of the stack)
+				\State \textsc{PancakeSort}($l_{n-1}$)
+			\EndIf
+		\end{algorithmic}
+	\end{algorithm}
+
+	As for how exactly this performs in the worst case, if $T(n)$ is the number of flips we'll need to do,
+	then $T(n) \leq 1$ if $n=1$, $T(n) \leq 5 + T(n-1)$ if $n=2$, and then $T(n) \leq 3 + T(n-1)$ for all $n$
+	greater than 2. So, in the worst case, we have roughly $3n$ flips.
+		
+\end{enumerate}		
 
 \end{document}
 
