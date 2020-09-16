@@ -88,7 +88,59 @@ Give the algorithm for binary search, using a for loop and no recursion.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item The problem takes as input a sorted array and a proposed value in that array, and returns
+		as output the boolean value corresponding to whether or not the value exists in the array.
+		We assume that the array is sorted from smallest to largest, with the value at index 1
+		being the smallest, and the last index containing the largest item.
+	\item The algorithm we propose uses a for loop which may iterate as many times as there are items in
+		the input array. On the first iteration, we compare the input value to the value at the middle
+		index. If the input equals the midpoint value, we break out of the for loop and return true.
+		If the input is larger than the value at the middle index, we only consider the largest
+		half of the array for the next iteration. If the input is smaller than the midpoint, we only
+		consider the smallest half of the array for the next iteration. Then on the next iteration,
+		we compute the midpoint of the new subarray and continue the process. If the input is eventually
+		found, we break out of the for loop and return true. Otherwise, once we eventually reach
+		a list of length 1, we either return true if this last item is the input, and false otherwise.
+		For either case, we break out of the for loop. Midpoints are calculated on odd length arrays
+		by rounding down (integer division).
+        \item
+                \begin{algorithm}\caption{\textsc{BinarySearch}($A$, $\omega$)}\label{alg:bs}
+                        {\bf Input:} an array $A$ sorted from smallest at index 0 to largest at the last index,
+                        proposed value in array $\omega$\\
+                        {\bf Output:} Return true if $\omega \in A$. Otherwise, return false.
+                \begin{algorithmic}[1]
+
+			\State $current_A \gets A$
+                        \State $size_A \gets |current_A|$
+                        \State $i \gets 1$
+			\State $n \gets |A|$
+
+                        \For{$i ... n$}
+				\If{$size_A == 1$}
+					\If{$\omega == current_A[1]$}
+						\State \Return $true$
+					\Else
+						\State \Return $false$
+					\EndIf
+				\EndIf
+				\State $midpoint \gets size_A/2$
+				\If{$\omega == current_A[midpoint]$} 
+                              		\State \Return $true$
+				\EndIf
+				\If{$\omega > current_A[midpoint$}
+					\State $current_A \gets current_A[midpoint,...,size_A]$
+					\State $size_A \gets |current_A|$
+				\ElsIf{$\omega < current_A[midpoint]$}
+					\State $current_A \gets current_A[1,...,midpoint]$
+					\State $size_A \gets |current_A|$
+				\EndIf
+                        \EndFor
+
+                \end{algorithmic}
+                \end{algorithm}
+\end{enumerate}
+
 
 % ============================================
 
