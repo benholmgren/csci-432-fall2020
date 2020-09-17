@@ -370,7 +370,21 @@ suffice).
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item
+		One option of a data structure for a graph is a 2-dimensional array. Each entry of the array in the first
+		dimension corresponds to a vertex in the graph, and the second dimension for each item is then every vertex
+		which this vertex shares an edge with.
+	\item
+		A second option of a data structure for a graph could be an $n$ x $n$ matrix for a graph with $n$ vertices.
+		This matrix is comprised of rows and columns each corresponding to vertices, with rows corresponding to the
+		number of edges shared with each vertex for any given vertex. The diagonal then, is comprised of the number
+		of self edges for any vertex. These matrices are easily implementable using a 2-dimensional array as
+		described above if a matrix hasn't already been implemented. The key difference however is that each row
+		corresponds to the connections between that row's corresponding vertex and all of the other vertices, whereas
+		a 2-D array only generally keeps track of edges between vertices and not also directly the absence of edges,
+		as is done by the 0-entries in an adjacency matrix.
+\end{enumerate}
 
 % ============================================
 
