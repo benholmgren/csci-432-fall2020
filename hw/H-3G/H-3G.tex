@@ -113,10 +113,9 @@ Give the algorithm for binary search, using a for loop and no recursion.
 
 			\State $current_A \gets A$
                         \State $size_A \gets |current_A|$
-                        \State $i \gets 1$
 			\State $n \gets |A|$
 
-                        \For{$i ... n$}
+			\While{$size_A \geq 1$}
 				\If{$size_A == 1$}
 					\If{$\omega == current_A[1]$}
 						\State \Return $true$
@@ -135,10 +134,53 @@ Give the algorithm for binary search, using a for loop and no recursion.
 					\State $current_A \gets current_A[1,...,midpoint]$
 					\State $size_A \gets |current_A|$
 				\EndIf
-                        \EndFor
+                        \EndWhile
 
                 \end{algorithmic}
                 \end{algorithm}
+	\item 
+		\textbf{Claim:} The loop in \textsc{BinarySearch} terminates.
+		\begin{proof}
+			Let $\mathcal{I}$ denote the set of all indices within the input array $A$, but instead of
+			ranging from 1 to $n$ as in the algorithm above, let $\mathcal{I}$ range from 0 to $n-1$. Notice that
+			$\mathcal{I} \subset \mathbb{Z}$. Define $f:\mathbb{Z}\to\mathbb{Z}$ where for any $i \in \mathcal{I}$,
+			$f(i) = (n-1)-i$. Thus switching the ordering of $\mathcal{I}$. In our for loop, evaluate $f(i)$ for any
+			possible value $i \in \mathcal{I}$. At first, when $i=0$, $f(i) = n - 1$. As $i$ increases, $f(i)$ 
+			decreases. No other loops exist within the main for loop in the algorithm, so eventually $i = n-1$ is reached.
+			Then, $f(n-1) = 0$. Because our decrementing function reaches zero as the final possible index in the
+			for loop is reached, we've shown that the for loop terminates.
+		\end{proof}
+	\item
+		\textbf{Claim:} At the start of each iteration of the while loop in lines 5-24 of \textsc{BinarySearch}, if a search input value
+		$s$ is inside of the input array $A$, it is inside the subset of $A$ currently being considered as $current_A$.
+		\begin{proof}
+			To prove the loop invariant, we need to show that this invariant is true before the first iteration of the loop, that
+			the invariant is maintained with every iteration of the loop, and that a correctness property comes out upon the
+			termination of the loop.
+
+			First, consider the preconditions of the loop. Before the first iteration of the loop, $A$ is sorted, and $current_A$ 
+			is just all of $A$. We know that the loop invariant is true before the first iteration of the loop, since indeed, if
+			$s \in A$, $s \in current_A$ as $A=current_A$ for the first iteration.
+
+			Next, consider the maintenance of the loop invariant. Observe that $current_A$ is reassigned to half of the last iteration
+			of $curent_A$ on any given iteration, and this is done corresponding to the value of $s$ with respect to the value of the
+			midpoint of the last iteration's $current_A$. Specifically, if $s$ is greater than the midpoint of $current_A$, we assign
+			$current_A$ for the next iteration to be the larger half of $current_A$. If $s$ is smaller than the midpoint of $current_A$,
+			we assign $current_A$ for the next iteration to be the smaller half of $current_A$. In either case, if $s \in A$, it is also
+			necessarily in $current_A$ throughout the entire mainenance step, since for either partition we are guaranteed to have a value
+			bounding $s$ on one extremity, and consider the entire remaining portion of the current array up to this bound.
+
+			Finally, consider the termination of the loop. At termination, the loop has returned either
+			a value of true or false. The loop guard continually keeps checking smaller and smaller values as $size_A$ is split in half
+			on every iteration, and eventually a value of $size_A=1$ must be reached, since any value greater than 1 divided by two must 
+			be $\geq 1$. In this case which must be reached, we must either return true or false. Once the loop terminates, we've either 
+			then found the value $s$ as a midpoint in the partition, or we've
+			continued to make $current_A$ smaller and smaller until it only contains one element. If this element is $s$, we return true, and
+			otherwise we've unearthed that $s \not \in A$, and we return false. Thus, by termination, the loop invariant remains true and
+			reveals to us the key property of whether or not $s \in A$.
+		\end{proof}
+
+
 \end{enumerate}
 
 
@@ -164,7 +206,154 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item
+		We are given an input of two arrays $X$ and $W$, where $X$ consists of a set of positive integers,
+		and $W$ consists of a set of positive integers which correspond as weights to $X$, and a positive
+		integer $T$. With this input, we want to compute the maximum weighted subset of $X$ whose elements 
+		sum to the given $T$. This maximal subset of $X$ is provided as output if there exists one or more
+		subsets of $X$ which sum to $T$, and otherwise $-\infty$ is provided as output when no subset of
+		$X$ sums to $T$.
+	\item
+		To accomplish this somewhat tricky twist on \textsc{SubsetSum}, we base our algorithm on the original
+		\textsc{SubsetSum} algorithm, only we keep track of lists which sum to an integer rather than boolean
+		values which indicate whether or not a subset sum is possible. We call this algorithm 
+		\textsc{SpecificSubsetSum}, which is a subalgorithm of the overall algorithm which we call
+		\textsc{WeightedSubsetSum}. In \textsc{SpecificSubsetSum}, we first go through the array as it is
+		provided, and take as input $X, i, W, X', and T$ where $X, W,$ and $T$ are defined as above and $i$
+		corresponds to the index of the next value we're considering, where $i$ ranges from 1 to $|X|$
+		and is initialized to $|X|$,
+		and $X'$ corresponds to the actual subset that's been so far considered since the first recursion 
+		which is initialized as $\emptyset$.
+		If $T=0$, we return $X'$  as a base case. Otherwise, if $T<0$ or $i = 0$ we return $-\infty$ as a
+		second base case, because we know we can't find a subset sum using only positive values to get to
+		a negative number, and if we reach $i=0$ we know that we are unable to check any more values in $X$
+		since $X$ has indices ranging from 1 to $|X|$, so we must return that a subset sum is not possible.
+		Otherwise, outside of the base cases, we recursively call the algorithm both with and without the
+		current index. Then we just return the maximally weighted subset returned from the recursive calls,
+		so long as we find a subset which is not $-\infty$. Note that we assume linkages in memory between
+		weights and corresponding values in $X$ and $W$. We denote the set of weights for any given set $X$
+		as $W_{X}$.
+
+		To assure that we're finding every possible subset, we compute this modified algorithm 
+		on many more sets than just the original $X$. 
+		Namely, we compute the set of all possible permutations of $X$. Letting $|X|=n$, we denote 
+		the $n!$ total permutations of $X$ as $X^*_1, ... , X^*_{n!}$ and the corresponding weights 
+		of permutations comprising the sets $W^*_1,...,W^*_{n!}$. Permutations are computed by recording
+		every possible combination of the indices of $X$.
+		Then we compute
+                \textsc{SpecificSubsetSum} on this gigantic set of all $X^*$ storing every outputted subset which is
+		not $-\infty$ in a new set, $X_{candidate}$ and its corresponding summed weight in $W_{candidate}$. In 
+		doing so, we've allowed the evaluation of
+		every possible ordering of $X$, meaning that we will find every possible subset which sums to $T$.
+                Then, for every candidate in $X_{candidate}$, we compute the maximum weight, and return the candidate
+                subset corresponding to this maximal weight.
+
+	\item
+		\begin{algorithm}\caption{\textsc{SpecificSubsetSum}($X$, $X'=\emptyset$ $W$, $i=|X|$, $T$)}\label{alg:sss}
+                        {\bf Input:} A set $X$ with corresponding weights $W$, a subset $X' \subset X$ initialized to $\emptyset$ unless
+			otherwise specified, an index $i$ initialized to $|X|$ unless otherwise specified, and a positive integer $T$\\
+                        {\bf Output:} Return a subset of $X$ which sums to $T$ if any exist. If not, return $-\infty$.
+                \begin{algorithmic}[1]
+
+			\If{$T=0$}
+				\State \Return $X'$
+			\ElsIf{$T<0$ or $i=0$}
+				\State \Return $-\infty$
+			\Else
+				\State $with \gets \textsc{SpecificSubsetSum}(X, X' + X[i], W' + W[i], i-1, T-X[i])$
+				\State $wout \gets \textsc{SpecificSubsetSum}(X, X', W', i-1, T)$
+				\If{$wout \not= -\infty \and with \not= -\infty$}
+					\State $sumWout = W_{wout}[1] + ... + W_{wout}[|W|]$
+					\State $sumWith = W_{with}[1] + ... + W_{with}[|W|]$
+					\State $max \gets max(sumWout, sumWith)$
+					\If{$max == sumWout$}
+						\State \Return $wout$
+					\Else
+						\State \Return $with$
+					\EndIf
+				\ElsIf{$wout \not=-\infty$}
+					\State \Return $wout$
+				\ElsIf{$with \not=-\infty$}
+					\State \Return $with$
+				\Else
+					\State \Return $-\infty$
+				\EndIf
+			\EndIf
+
+                \end{algorithmic}
+                \end{algorithm}
+
+		\begin{algorithm}\caption{\textsc{WeightedSubsetSum}($X$, $W$, $T$)}\label{alg:sss}
+                        {\bf Input:} A set $X$ with corresponding weights $W$, and a positive integer $T$\\
+                        {\bf Output:} Return the maximally weighted subset of $X$ which sums to $T$ if any exist. 
+			If not, return $-\infty$.
+                \begin{algorithmic}[1]
+			\State $X^*_1, ... , X^*_{|X|!} \gets$ All possible permutations of $X$
+			\State $W^*_1, ..., W^*_{|X|!} \gets$ the corresponding weights to all permutations of $X$
+			\State $i \gets 1$
+			\State $n \gets |X|$
+			\State $max \gets \{-\infty\}$
+			\State $maxVal \gets -\infty$
+			\For{$i < n!$}
+				\State $current \gets$ \textsc{SpecificSubsetSum}($X^*_i, \emptyset, W^*_i, |X^*_i|, T$)
+				\State $currentVal \gets W_{current}[1] + ... + W_{current}[|W_{current}|]$
+				\If{$currentVal > maxVal$}
+					\State $maxVal \gets currentVal$
+					\State $max \gets current$
+				\EndIf
+			\EndFor
+			\State \Return $max$
+
+		\end{algorithmic}
+		\end{algorithm}
+
+	\item
+		\textsc{SpecificSubsetSum} has the same runtime as \textsc{SubsetSum} as its presented in the textbook,
+		since the algorithm takes identical form, only it returns the sets which are guaranteed to sum to $T$
+		rather than a boolean value. This runtime is shown to be $O(2^n)$ on page 78 of Jeff Erickson's book.
+		Then, \textsc{WeightedSubsetSum} conducts $n!$ runs of \textsc{SubsetSum}, as it runs on every possible
+		permutation of $X$. Making the runtime of \textsc{WeightedSubsetSum} $=O(2^nn!)$, which isn't especially
+		speedy. We would expect a high runtime however, since subset sum is already an NP-complete problem,
+		and we've only made it more complicated by adding in weights.
+	\item
+		\textbf{Claim:} If our algorithm terminates, it is correct.
+		\begin{proof}
+			To prove partial correctness, we need to show prove the loop invariant of our algorithm. We can
+			guarantee correctness of \textsc{SpecificSubsetSum}, because it is identical algorithmically to
+			\textsc{SubsetSum}, only it returns the actual subset rather than a boolean value. Then our loop
+			invariant can be found in \textsc{WeightedSubsetSum}, in the loop contained in lines 7 through 14.
+			Making our loop invariant that $max$ is storing the largest weighted subset of $X$ summing to $T$
+			which has been passed over in the loop, eventually making $max$ necessarily the largest weighted subset of $X$
+			which sums to $T$. So then we need to show that the loop invariant holds throughout initialization,
+			maintenence, and termination.
+
+			Certainly the loop invariant holds for initialization, as the value $max$ is empty, which has
+			the largest weight sum of anything we've iterated through, since we haven't iterated through anything.
+
+			For the maintenence step, we can also see that the loop invariant holds, as $max$ is updated whenever
+			a new value is encountered with a weight sum larger than $max$. This means that the largest weight sum
+			that has yet been encountered in the loop must be stored in $max$, otherwise it would've been updated in
+			line 12, with the value of its weight sum stored for future comparisons in line 11.
+
+			Finally, upon termination, the loop has iterated over every possible permutation of $X$, and has either
+			computed a subset which sums to $T$, or has returned $-\infty$. Because the loop maintenance holds, $max$
+			must have the largest weighted subset summing to $T$ out of every value 
+			that's been iterated on, (which in this case is every value), or a value 
+			of $-\infty$. Since every permuted set we've iterated over has comprised every possible permutation of $X$,
+			running \textsc{SpecificSubsetSum} must unearth every possible subset which sums to $T$. And since we can guarantee
+			that the subset in $max$ must be the largest weighted subset with respect to everything we've iterated over,
+			it reveals the critical property of \textsc{WeightedSubsetSum} that by the end of the loop we've identified the
+			largest weighted subset which sums to $T$. If none exist, we must've only found weight sums also equaling $-\infty$,
+			so this is what must be returned in the trivial case.
+		\end{proof}
+
+
+
+
+
+
+\end{enumerate}
 
 % ============================================
 
