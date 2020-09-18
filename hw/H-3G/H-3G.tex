@@ -399,12 +399,63 @@ Walk through the algorithm using the Dynamic Programming algorithm present in
 Section 3.6.
 
 \paragraph{Answer}
+\section{Recursion}
 
-% ============================================
+\begin{enumerate}
+	\item lisbigger(0,1): 1 vs 7: max return 3
+	\item - lisbigger(0,2): 1 vs 6: max return 3
+	\item - - lisbigger(0,3): 1 vs 11: max return 2
+	\item - - - lisbigger(0, 4): 1 vs 3: max return 2
+	\item - - - - lisbigger(0,5): 1 vs 11: max return 1
+	\item - - - - - lisbigger(0,6): return 0
+	\item - - - - - 1 + lisbigger(5, 6): return 1
+	\item - - - - 1 + lisbigger(4, 5): 3 vs 11: max return 2
+	\item - - - - - lisbigger(4, 6): return 0
+	\item - - - - - 1 + lisbigger(5, 6): return 1
+	\item - - - 1 + lisbigger(3, 4): 11 vs 3: 2nd case return 1
+	\item - - - - lisbigger(3, 5): 11 vs 11: 2nd case return 0
+	\item - - - - - lisbigger(3, 6): return 0
+	\item - - 1 + lisbigger(2, 3): 6 vs 11: max return 2
+	\item - - - lisbigger(2, 4): 6 vs 3: case 2 return 1
+	\item - - - - lisbigger(2, 5): 6 vs 11: max return 1
+	\item - - - - - lisbigger(2, 6) return 0
+	\item - - - - - 1 + lisbigger(5, 6): return 1
+	\item - - - 1 + lisbigger(3, 4): 11 vs 3 (ive computed this earlier) returns 1
+	\item - 1 + lisbigger(1, 3): 7 vs 6 case 2 return 3
+	\item - - lisbigger(1, 4): 7 vs 11: max return 2
+	\item - - - lisbigger(1, 4): 7 vs 3: case 2 return 1
+	\item - - - - lisbigger(1, 5): 7 vs 11: max return 1
+	\item - - - - - lisbigger(1,6): return 0
+	\item - - - - - 1 + lisbigger(5,6) return 1
+	\item - - - 1 + lisbigger(3, 4): (done before) return 1
 
-TODO: your answer goes between these lines
+\end{enumerate}
+Meaning the longest increasing substring is a length of 3
+I will admit I did use the dynamic approach myself for my sanity
 
-% ============================================
+\section{Dynamic}
+
+\begin{enumerate}
+	\item Create base cases --- store 0 in lisbigger[m, 6] for any integer m. 
+	\item Generate values for each column in our lisbigger[] table from right to left
+	\item Lisbigger[0,5] = 1
+	\item Lisbigger[1,5] = 1
+	\item Lisbigger[2,5] = 1
+	\item Lisbigger[3,5] = 0
+	\item lisbigger[4,5] = 1
+	\item lisbigger[0,4] = 2
+	\item lisbigger[1,4] = 1
+	\item lisbigger[2,4] = 1
+	\item lisbigger[3,4] = 0
+	\item lisbigger[0,3] = 2
+	\item lisbigger[1,3] = 2
+	\item lisbigger[2,3] = 1
+	\item lisbigger[0,2] = 3
+	\item lisbigger[1,2] = 2
+	\item lisbigger[0,1] = 3
+\end{enumerate}
+
+
 
 \nextprob
 \collab{TODO}
@@ -460,8 +511,74 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(1)}},0)$.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item We are given an x,y graph with a bunch of rectangles on it. If we union all the rectangles together, we are basically trying to find the boundary of the shape. Since all the shapes are rectangles, though, we can describe the boundary as a sequence of points that are connected via straight lines. The input would be the shape (photo) and the output would be the sequence of points (skyline). 
+	\item We build up a solution by adding rectangles 1 by 1 to our silhouette. When we add a rectangle, we query if the skyline's points are interior or exterior to it. If the skylines points are all exterior to the rectangle, we know the rectangle does not contribute to the skyline. If any of the skyline's points are interior, we remove that point and expand our skyline. Additionally, we check if the rectangle has exterior points to the skyline. We add these points to the skyline.  Cool problem!
+	\item 
+\begin{algorithm}\caption{\textsc{Skyliner}($R$)}\label{alg:bs}
+                        {\bf Input:} List of rectangles $R$,
+                        {\bf Output:} Return list of points in skyline $S$ 
+                \begin{algorithmic}[h]
+			\State -----\bf{FUNCTION IsInterior(rectangle b, point point}
 
+		\If{point.x $\geq x_b^1$
+		and point.x $\leq$ $x_b^2$}
+		
+			\If{point.y $\leq$ $y_b$}
+			\State \Return True
+			\EndIf
+			
+		
+		\Else
+			\State \Return False
+		\EndIf
+
+		\State End Function
+			\State -------
+
+
+	\State -----\bf{FUNCTION AddRectangle(rectangle b, Skyline $S$}
+			\For{p in $S$}
+			\If{IsInterior(b,p)}
+			\State ExpandSkyline(b, $S$, p)
+			\EndIf
+			\EndFor
+			\For{q in b}
+			\If{IsInterior(q,$S$)}
+			\State addpoint(q,$S$)
+			\EndIf
+			\EndFor
+	\State End Function
+	\State -------
+
+	\State -----\bf{FUNCTION ExpandSkyline(rectangle b, Skyline $S$, point p}
+			\State replace p in $S$ with $(p.x, b.y)$ and $(b.x, p.y)$
+\State End Function
+	\State -------
+
+
+
+
+		\State $S \gets \emptyset$ 
+
+
+
+
+		\end{algorithmic}
+                \end{algorithm}
+	\item  If there are n buildings, we have 4n original points. Then we are manipulating O(n) points in our skyline O(n) times, once for each added rectangle. Then our algorithm is $O(n^2)$. I am suspicious we could prove it is $O(nlogn)$ but this still satisfies termination.
+	\item Basically a proof of our loop invariant on the for loop that iterates through all the rectangles - Each loop returns the skyline for the first n rectangles. Proof - \\
+		Base case: The first rectangle has all of its points in the skyline, so it is trivially true. \\
+		Inductive Step - Suppose we have the skyline for the first $n$ rectangles. We want to show our for loop returns the skyline for the first $n+1$ rectangles. I will make this logical jump with contradiction. Suppose our algorithm did not return the proper skyline. Then either there is a point in our skyline that should not be, or there is a point not in our skyline that should be. \\
+		Case 1 - Point in our skyline that should not be. If a point in our skyline should not be there, it is an interior point. Then, since we verify every point in our skyline is not an interior point for every rectangle we add, we cannot fail this way!\\
+
+		Case 2 - Point not in our skyline that should be. If there is a point that is part of our skyline, it is guaranteed to be an exterior point on a rectangle. Otherwise, it would not be part of the boundary. Since we check all of these points for each rectangle, we don't fail this way either.\\
+		Note: When we add points, we add them sorted by x. We can verify they are in the right order because we must draw straight lines to them. 
+		
+		Then indeed, if our algorithm terminates, it returns the correct skyline.
+
+        		
+\end{enumerate}
 % ============================================
 
 
