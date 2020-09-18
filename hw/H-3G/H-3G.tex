@@ -5,8 +5,8 @@
 %% UPDATE these variables:
 \renewcommand{\hwnum}{3}
 \title{Advanced Algorithms, Homework \hwnum}
-\author{TODO-Group Member Names Here}
-\collab{n/a}
+\author{Ben Holmgren}
+\collab{Ryan Hansen}
 \date{due: 17 September 2020}
 
 \begin{document}
@@ -24,7 +24,7 @@ General homework expectations:
 \end{itemize}
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 Work in a group of size $\geq 2$.  Explain your strategy for working in a group.
 
@@ -42,7 +42,7 @@ certain problems.
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 Your group should make at least five contributions to the Piazza board.  A
 contribution can be either asking a relevant question, responding to another
@@ -56,22 +56,71 @@ get stuck in answering it.
 
 Our groups contributions are:
 \begin{enumerate}
-	\item (The post was originally from Dr. Fasy on 9/2 regarding a question from the activity in class) TODO:
-        copy the post here.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
-        copy the post here.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
-        copy the post here.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
-        copy the post here.
-    \item (TODO: state the problem number, name of poster, and date/time). TODO:
-        copy the post here.
+	\item (The post was originally from Dr. Fasy on 9/2 regarding a question from the activity in class)
+	    \textbf{My answer:}
+	    Can we break T(n) into parts, and just add an additional constant time operation 
+		so that each part has one? So for this example we could maybe think about 
+		$T(n) = (T(n/2) + \Theta(1)) + (T(n/3) + \Theta(1) )$. Then, we find we 
+		can analyze $(T(n/2) + \Theta(1)) and (T(n/3) + \Theta(1))$ separately. 
+		This seems a little weird, because we are adding an 
+		extra constant time operation to each step of the recursion, 
+		but we know at least that we will find something in master's theorem which 
+		is an upper bound on the runtime of the provided recurrence relation.
+		Then, master's theorem says that for 
+		each of these broken up recurrence relations, we will use case 2, as $a = 1 = b^k = 2^0 and = 3^0$ 
+		for the two separate relations we're looking at.
+		Meaning that the recurrence relation is bounded by $\Theta(n^klogn) + \Theta(n^klogn) 
+		= \Theta(2logn) = \Theta(logn)$. We know that the recurrence relation must not
+		have worse time complexity than this runtime, and I would think that it should be a reasonably tight bound.
+
+    \item (This post was a followup to Dr. Fasy, which provided an upper bound on the above problem but not a tight bound)
+	    \textbf{My Response:}
+		Ah I see, then we'd get that merge sort is $\Theta(n)$ when its actually $\Theta(nlogn)$, so that wouldn't work.
+		$T(n/2)$ should have greater time complexity than $T(n/3)$ since $n/2$ contains more elements than $n/3$, 
+		correct? So could we just use $2T(n/2) + \Theta(1)$ 
+		in master's theorem instead of $T(n/2) + T(n/3) + \Theta(1)$?
+		Then we'd find in master's theorem that $T(n) = \Theta(n^{log_2(2)}) = \Theta(n)$, 
+		bounding the original recurrence relation.
+    
+    \item (This question came from Michael Utt on 9/17 at 2:11 PM regarding question 3-6 on the HW)
+	    \textbf{Original Question:}
+	    The second dynamic programming algorithm has this foor loop: for i ← n downto 0.
+		What would all the values of i be? Is 0 included?
+
+		\textbf{Response:}
+		I believe zero would be included, so I think i would range from n to zero.
+
+    \item (This post was a response to a response to a question from an anonymous user on 9/17).
+	    
+	    \textbf{Original Response:}My proof of partial correctness knowledge is not super solid, but I am not sure if a 
+		proof of partial correctness is necessary for 3-4. Partial correctness is proven if an algorithm 
+		terminates. An algorithm is proved to terminate either if an algorithm has a finite runtime or if a decrementing 
+		function is used. If you have a finite runtime, I am not sure if the full proof is necessary. 
+	  
+	    \textbf{My Response:}I thought it was the other way around, 
+	    that an algorithm is proven to be partially correct basically if you 
+	    prove the loop invariant. An 
+	    algorithm is partially correct with respect to a pre and post condition if whenever the initial state is fulfilled, the final state 
+	    is guaranteed to fulfill this property. It need not prove termination. And what we get out of this is that we guarantee that 
+	    some critical property to the algorithm giving us the desired output ends up actually holding for sure once the loop is 
+	    finished. This is different from the loop guard because the loop guard just makes sure the 
+	    loop keeps iterating- it doesn't tell us anything necessarily significant about the properties of the loop/algo.
+\item (This post was from  Alex Sutherland on 9/17 at 6:22 PM) \textbf{Question:}
+	What exactly is the difference between run time and time complexity? When I google this question, 
+		it says run time is the amount of time a program takes to run where as time complexity is 
+		how calculation count increases with input, but the book seems to refer to 
+		run time as what google says time complexity is.
+	\textbf{Post:}I always thought of time complexity as 
+	    more of a strictly theoretical assertion- and by nature asymptotic, and run 
+		time more of a both theoretical and empirically tested concept. But 
+		they are very often used synonymously, in my opinion they don't 
+		seem to be especially different concepts.
 \end{enumerate}
 
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 Give the algorithm for binary search, using a for loop and no recursion.
 
@@ -187,7 +236,7 @@ Give the algorithm for binary search, using a for loop and no recursion.
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
 \begin{enumerate}
@@ -240,7 +289,9 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
 		Namely, we compute the set of all possible permutations of $X$. Letting $|X|=n$, we denote 
 		the $n!$ total permutations of $X$ as $X^*_1, ... , X^*_{n!}$ and the corresponding weights 
 		of permutations comprising the sets $W^*_1,...,W^*_{n!}$. Permutations are computed by recording
-		every possible combination of the indices of $X$.
+		every possible combination of the indices of $X$, so that we gain every possible ordering of $X$,
+		and by inputting every combination into \textsc{SpecificSubsetSum}, we then gain every possible
+		subset of $X$ which sums to $T$.
 		Then we compute
                 \textsc{SpecificSubsetSum} on this gigantic set of all $X^*$ storing every outputted subset which is
 		not $-\infty$ in a new set, $X_{candidate}$ and its corresponding summed weight in $W_{candidate}$. In 
@@ -319,16 +370,16 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
 	\item
 		\textbf{Claim:} If our algorithm terminates, it is correct.
 		\begin{proof}
-			To prove partial correctness, we need to show prove the loop invariant of our algorithm. We can
+			To prove partial correctness, we need to prove the loop invariant of our algorithm. We can
 			guarantee correctness of \textsc{SpecificSubsetSum}, because it is identical algorithmically to
 			\textsc{SubsetSum}, only it returns the actual subset rather than a boolean value. Then our loop
 			invariant can be found in \textsc{WeightedSubsetSum}, in the loop contained in lines 7 through 14.
-			Making our loop invariant that $max$ is storing the largest weighted subset of $X$ summing to $T$
-			which has been passed over in the loop, eventually making $max$ necessarily the largest weighted subset of $X$
-			which sums to $T$. So then we need to show that the loop invariant holds throughout initialization,
-			maintenence, and termination.
+			Specifying our loop invariant as the property that $max$ is storing the largest weighted subset 
+			of $X$ summing to $T$ which has been passed over in the loop, eventually making $max$ necessarily 
+			the largest weighted subset of $X$ which sums to $T$. So then we need to show that the loop 
+			invariant holds throughout initialization, maintenence, and termination.
 
-			Certainly the loop invariant holds for initialization, as the value $max$ is empty, which has
+			Certainly the loop invariant holds for initialization, as the value $max$ contains $-\infty$, which has
 			the largest weight sum of anything we've iterated through, since we haven't iterated through anything.
 
 			For the maintenence step, we can also see that the loop invariant holds, as $max$ is updated whenever
@@ -360,7 +411,7 @@ Chapter 2, Problem 1b (Generalized \textsc{SubsetSum}).
 
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 Describe two different data structures that you can use to store a graph.
 Please give a complete description (i.e., a response of ``an array'' will not
@@ -390,7 +441,7 @@ suffice).
 
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 Walk through the exponential time Longest Increasing Subsequence (LIS) algorithm
 on page 108 for the input: $\left[ 1, 7, 6, 11, 3, 11 \right]$.
@@ -407,7 +458,7 @@ TODO: your answer goes between these lines
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 What is the closed form of the following recurrence relations?  Use Master's
 theorem to justify your answers:
@@ -454,7 +505,7 @@ Note: we assume that $T(1)=\Theta(1)$ whenever it is not explicitly given.
 % ============================================
 
 \nextprob
-\collab{TODO}
+\collab{Ryan Hansen}
 
 \emph{The skyline problem:} You are in Camden, NJ waiting for the ferry across the river to
 get into Philadelphia, and are looking at the skyline.  You take a photo, and notice that each building
