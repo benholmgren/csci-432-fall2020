@@ -424,7 +424,32 @@ Note: we assume that $T(1)=\Theta(1)$ whenever it is not explicitly given.
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item
+		For this problem, $a=16, b=4, c=1, k=1$. $a>b^k$, so $T(n)=
+		\Theta(n^{\log_{b} a}) = \Theta(n^{log_{4} 16}) = \Theta(n^2)$
+	\item
+		For this next problem, $a=2, b= 2, k=1$, and $f(n) = nlogn = 
+		n^{\log_{2} 2}log^1n$. So we fit into case 2 here. 
+		Thus, $T(n) = \Theta(n^1log^{1+1}n) =\Theta(nlog^2n)$.
+	\item
+		We've got another tricky log problem here. We find $a = 6,
+		b=3, k = 2$. We hypothesize case 3, and indeed $f(n) = n^2logn
+		= \Omega(n^{\log_{3} 6 + \epsilon})$ since $n^{\log_{3} 6 }< 
+		n^2 < n^2logn$. And, we satisfy the condition that $6(n/3)^2
+		log(n/3) \leq
+		cf(n) = c(n^2logn)$ for a $c<1$ and large enough $n$, 
+		which is certainly true (say with $c = 100$ and $n = 99$).
+		Thus, $T(n) = \Theta(f(n)) = \Theta(n^2logn)$.
+	\item
+		At it again, $a = 4, b = 2, k = 2$. Observing case 2, we
+		pass the easy master's theorem test that $a = b^k$, so
+		$T(n) = \Theta(n^2logn)$.
+	\item
+		Lastly, $a = 9, b = 3, k = 1$. Examining the easy master's
+		theorem test, $a > b^k$ since $9 > 3$, so we fall into case 3.
+		Meaning that $T(n) = \Theta(n^{\log_{b}a}) = \Theta(n^2)$.
+\end{enumerate}
 
 % ============================================
 
