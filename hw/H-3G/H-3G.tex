@@ -595,7 +595,7 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(1)}},0)$.
                         {\bf Input:} List of rectangles $R$,
                         {\bf Output:} Return list of points in skyline $S$ 
                 \begin{algorithmic}[h]
-			\State -----\bf{FUNCTION IsInterior(rectangle b, point point}
+			\State -----\bf{FUNCTION IsInterior(rectangle b, point p)}
 
 		\If{point.x $\geq x_b^1$
 		and point.x $\leq$ $x_b^2$}
@@ -613,7 +613,7 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(1)}},0)$.
 			\State -------
 
 
-	\State -----\bf{FUNCTION AddRectangle(rectangle b, Skyline $S$}
+		\State -----\bf{FUNCTION AddRectangle(rectangle b, Skyline $S$)}
 			\For{p in $S$}
 			\If{IsInterior(b,p)}
 			\State ExpandSkyline(b, $S$, p)
@@ -627,7 +627,7 @@ start with $(\min_b{x_b^{(1)}},0)$ and end with $(\max_b{x_b^{(1)}},0)$.
 	\State End Function
 	\State -------
 
-	\State -----\bf{FUNCTION ExpandSkyline(rectangle b, Skyline $S$, point p}
+		\State -----\bf{FUNCTION ExpandSkyline(rectangle b, Skyline $S$, point p)}
 			\State replace p in $S$ with $(p.x, b.y)$ and $(b.x, p.y)$
 \State End Function
 	\State -------

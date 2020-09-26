@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1600398040 "H-3G.tex" "H-3G.pdf" "H-3G" 1600398040
+["pdflatex"] 1600405018 "H-3G.tex" "H-3G.pdf" "H-3G" 1600405209
   "../fasy-hw.sty" 1597973390 3014 53950b0d038564e329168f1460132f02 ""
   "/etc/texmf/web2c/texmf.cnf" 1597974185 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -13,6 +13,7 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1246382020 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1246382020 940 228d6584342e91276bf566bcf9716b83 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm" 1136768653 1300 63a6111ee6274895728663cf4b4e7e81 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1136768653 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
@@ -34,6 +35,7 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/wasy/wasy7.tfm" 1579560596 912 e43f3049348c6f2670d3b324e657c6e7 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/wasy/wasy8.tfm" 1579560596 904 a3deb54664adaaa632c6cdee911ffe34 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb" 1248133631 32001 6aeea3afe875097b1eb0da29acd61e28 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb" 1248133631 37912 77d683123f92148345f3fc36a38d9ab1 ""
@@ -117,11 +119,11 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1597974292 4770781 1ed1abab22da9c3e2cc82e4db562318b ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1597974311 8256750 1f190a436f15beb31cc495e4d7cf912b ""
-  "H-3G.aux" 1600398040 2281 6394c7ef0499e3eb22ba4caefe42eb6c "pdflatex"
-  "H-3G.out" 1600398040 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "H-3G.tex" 1600398039 27787 9ea1e780c36128dbc3b131ccb81c4573 ""
+  "H-3G.aux" 1600405019 2716 0a7cd6437fcba5884039b044f65bb743 "pdflatex"
+  "H-3G.out" 1600405019 86 1722f1c02d6800784b2e434864520ad7 "pdflatex"
+  "H-3G.tex" 1600405017 33515 1d849bce67fe46594688a06b97f303be ""
   (generated)
-  "H-3G.aux"
   "H-3G.pdf"
-  "H-3G.log"
+  "H-3G.aux"
   "H-3G.out"
+  "H-3G.log"
