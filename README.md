@@ -78,7 +78,7 @@ materials for this class.  See the resources section below for forking direction
 
 ## Other Course Tools 
 
-- Group discussions, questions, and announcements will be through TODO.
+- Group discussions, questions, and announcements will be through Piazza.
 - Homework will be graded on Gradescope.  All homework should be posted both in
   Gradescope and in D2L.
 
@@ -276,11 +276,78 @@ Each week, we assign:
 - Miro Boards: [Tuesday](https://miro.com/app/board/o9J_knOJFZ4=/) [Thursday](https://miro.com/app/board/o9J_knW0vyk=/)
 
 ### Week 2 (25, 27 August)
+
 - Topics: Recursion, Recursion Invariants, Asymptotics
 - Reading: Chapter 1
+- HW-1 Due on 27 August
 
-### Remaining weeks will be posted shortly
+### Week 3 (1,3 September)
 
+- Topics: Recursion, Termination, Partial Correctness, Master Theorem
+- Reading: Chapters 1 (cont.) and Chapter 2
+- HW-2 Due on 3 September
+
+### Week 4 (8, 10 September)
+
+- Topics: Backtracking
+- Reading: Chapter 2
+
+### Week 5 (15,17 September)
+
+- Topics: Dynamic Programming 
+- Reading: Chapter 3
+- HW-3 Due on 17 September
+
+### Week 6 (22,24 September)
+
+- Topics: Dynamic Programming 
+- Reading: Chapter 3 (cont.)
+
+### Week 7 (29 Sept, 1 Oct)
+
+- Topics: Greedy Algorithms
+- Reading: Chapter 4
+- HW-4 Due on 1 October
+
+### Week 8 (6,8 October)
+
+- Topics: Graph Algorithms
+- Reading: Chapters 5,6
+
+### Week 9 (13,15 October)
+
+- Topics: More Graph Algorithms
+- Reading: Chapter 7
+- HW-5 Due on 12 October
+
+### Week 10 (20,22 October)
+
+- Topics: Shortest Paths
+- Reading: Chapter 8,9
+
+### Week 11 (27,29 October)
+
+- Topics: Max Flow / Min Cut
+- Reading: Chapter 10
+- HW-6 Due on 26 October
+
+### Week 12 (3,5 November)
+
+- Topics: Applications of Flows / Cuts
+- Reading: Chapter 11
+
+### Week 13 (10,12 November)
+
+- Topics: Special Topic
+- Reading: TBD
+- HW-7 Due on 9 November
+
+### Week 14 (17,19 November)
+
+- Topics: Special Topic
+- Reading: TBD
+
+### FINAL: 24 November
 
 --- 
 
