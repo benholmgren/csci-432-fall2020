@@ -1,6 +1,12 @@
 \documentclass{article}
 \usepackage{../fasy-hw}
 \usepackage{ wasysym }
+\usepackage {tikz}
+\usetikzlibrary {positioning}
+%\usepackage {xcolor}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+% Definitions of handy macros can go here
+
 
 %% UPDATE these variables:
 \renewcommand{\hwnum}{5}
@@ -51,8 +57,223 @@ union-find data structure, with both ``heuristics.''
 
 % ============================================
 
-TODO: your answer goes between these lines
+I didn't see the prompt asking for alphabetic labels on the vertices until
+I'd already fully completed the problem, so just for reference, let vertex
+$a$ be vertex 7, vertex $b$ be vertex 1, vertex $c$ be vertex 6, vertex
+$d$ be vertex 5, vertex $e$ be vertex 4, vertex $f$ be vertex 3, and vertex
+$g$ be vertex 2.
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (2) [above right=of 1] {$2$};
+\node[state] (3) [below right=of 2] {$3$};
+\node[state] (4) [below=of 3] {$4$};
+\node[state] (5) [below left=of 4] {$5$};
+\node[state] (6) [above left=of 5] {$6$};
+\node[state] (7) [above right=of 6, below right=of 1] {7};
+\path (1) edge [-] node[below =0.15 cm] {$8$} (2);
+\path (2) edge [-] node[below =0.15 cm] {$5$} (3); 
+\path (3) edge [-] node[right =0.15 cm] {$16$} (4); 
+\path (4) edge [-] node[below =0.15 cm] {$26$} (5); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6); 
+\path (1) edge [-] node[left =0.15 cm] {$18$} (6); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6);
+\path (1) edge [-] node[above = 0.15 cm] {$2$} (7);
+\path (1) edge [-] node[above = 0.15 cm] {$10$} (3);
+\path (3) edge [-] node[above = 0.15 cm] {$3$} (7);
+\path (4) edge [-] node[above = 0.15 cm] {$30$} (7);
+\path (5) edge [-] node[right = 0.15 cm] {$14$} (7);
+\path (6) edge [-] node[below = 0.15 cm] {$12$} (7);
+\end{tikzpicture}
+\end{center}
+At first, we have the unaltered graph from Kruskall's algorithm, and
+we have a union find data structure holding each node individually with no
+edges to any other nodes except for self loops from each node to itself.
+In an array format, this union find data structure may be described by
+\{1\},\{2\},\{3\},\{4\},\{5\},\{6\},\{7\} where each vertex is only unioned
+with itself.
 
+Then, with the first iteration of Kruskall's algorithm, we union the points 1 
+and 7, since the edge weight $2$ is the smallest weight on the graph. We also 
+remove redundant parallel edges by deleting the largest edge in a pair of 
+parallel edges.
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (2) [above right=of 1] {$2$};
+\node[state] (3) [below right=of 2] {$3$};
+\node[state] (4) [below=of 3] {$4$};
+\node[state] (5) [below left=of 4] {$5$};
+\node[state] (6) [above left=of 5] {$6$};
+\path (1) edge [-] node[below =0.15 cm] {$8$} (2);
+\path (2) edge [-] node[below =0.15 cm] {$5$} (3); 
+\path (3) edge [-] node[right =0.15 cm] {$16$} (4); 
+\path (4) edge [-] node[below =0.15 cm] {$26$} (5); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6);
+\path (3) edge [-] node[above = 0.15 cm] {$3$} (1);
+\path (4) edge [-] node[above = 0.15 cm] {$30$} (1);
+\path (5) edge [-] node[right = 0.15 cm] {$14$} (1);
+\path (6) edge [-] node[left = 0.15 cm] {$12$} (1);
+\end{tikzpicture}
+\end{center}
+Where we eliminate the smallest edge, weighted 2, giving us the redundant
+parallel edges weighted 10 and 18, and then we also delete these edges to
+leave us with the graph to consider for the next iteration. The union find
+data structure is then updated to have vertex 7 map to vertex 1, and looks 
+as follows:
+
+\{$\{7\} \rightarrow 1$\},\{2\},\{3\},\{4\},\{5\},\{6\}
+
+Next, we collapse the smallest remaining edge, weighted $3$, and remove 
+the largest redundant parallel edges, weighted 8 and 16:
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (2) [above right=of 1] {$2$};
+\node[state] (4) [below=of 3] {$4$};
+\node[state] (5) [below left=of 4] {$5$};
+\node[state] (6) [above left=of 5] {$6$};
+\path (2) edge [-] node[below =0.15 cm] {$5$} (1); 
+\path (1) edge [-] node[right =0.15 cm] {$16$} (4); 
+\path (4) edge [-] node[below =0.15 cm] {$26$} (5); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6);
+\path (5) edge [-] node[right = 0.15 cm] {$14$} (1);
+\path (6) edge [-] node[left = 0.15 cm] {$12$} (1);
+\end{tikzpicture}
+\end{center}
+
+Updating the union find data structure, we map vertex 3 also to vertex 1, 
+and the data structure thus is as follows, recalling that 3 was initially
+adjacent to 7 by the edge with weight 3:
+
+\{$(\{\{3\} \rightarrow 7\}) \rightarrow 1$\},\{2\},\{4\},\{5\},\{6\}
+
+Next, we relax the edge weighted 4 and delete the resulting redundant edge
+weighted 14:
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (2) [above right=of 1] {$2$};
+\node[state] (4) [below=of 3] {$4$};
+\node[state] (6) [above left=of 5] {$6$};
+\path (2) edge [-] node[below =0.15 cm] {$5$} (1); 
+\path (1) edge [-] node[right =0.15 cm] {$16$} (4); 
+\path (4) edge [-] node[below =0.15 cm] {$26$} (6); 
+\path (6) edge [-] node[left = 0.15 cm] {$12$} (1);
+\end{tikzpicture}
+\end{center}
+
+Updating the union find data structure to take the following form:
+
+\{$(\{\{3\} \rightarrow 7\}) \rightarrow 1$\},\{2\},\{4\},\{$\{5\} \rightarrow 6$\}
+
+Next, we relax the edge weighted 5:
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (4) [below=of 3] {$4$};
+\node[state] (6) [above left=of 5] {$6$};
+\path (1) edge [-] node[right =0.15 cm] {$16$} (4); 
+\path (4) edge [-] node[below =0.15 cm] {$26$} (6); 
+\path (6) edge [-] node[left = 0.15 cm] {$12$} (1);
+\end{tikzpicture}
+\end{center}
+
+Updating the union find data structure to take the following form, recalling
+that the vertex 3 was initially adjacent to 2:
+
+\{$(\{\{\{2\} \rightarrow 3\}\rightarrow 7\}) \rightarrow 1$\},\{4\},\{$\{5\} \rightarrow 6$\}
+
+Next, we relax the edge weighted 12, deleting the redundant edge that appears which has weight 26:
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (4) [below=of 3] {$4$};
+\path (1) edge [-] node[right =0.15 cm] {$16$} (4); 
+\end{tikzpicture}
+\end{center}
+
+Updating the union find data structure to take the following form:
+
+\{$(\{\{\{2\} \rightarrow 3\}, \{\{5\} \rightarrow 6\}\rightarrow 7\} \rightarrow 1$\},\{4\}
+
+And finally, we relax the last remaining edge with weight 16:
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\end{tikzpicture}
+\end{center}
+
+Updating the union find data structure to take the following form:
+
+\{$(\{\{\{2\}, \{4\} \rightarrow 3\}, \{\{5\} \rightarrow 6\} \rightarrow 7\} \rightarrow 1$\}
+
+By examining our union find data structure, indeed we've pinpointed
+the minimum spanning tree of the graph, which is
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =2 cm and 2.5cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+draw,processblue , text=blue , minimum width =.25 cm}]
+\node[state] (1)
+{$1$};
+\node[state] (2) [above right=of 1] {$2$};
+\node[state] (3) [below right=of 2] {$3$};
+\node[state] (4) [below=of 3] {$4$};
+\node[state] (5) [below left=of 4] {$5$};
+\node[state] (6) [above left=of 5] {$6$};
+\node[state] (7) [above right=of 6, below right=of 1] {7};
+\path (2) edge [-] node[below =0.15 cm] {$5$} (3); 
+\path (3) edge [-] node[right =0.15 cm] {$16$} (4); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6); 
+\path (5) edge [-] node[below =0.15 cm] {$4$} (6);
+\path (1) edge [-] node[above = 0.15 cm] {$2$} (7);
+\path (3) edge [-] node[above = 0.15 cm] {$3$} (7);
+\path (6) edge [-] node[below = 0.15 cm] {$12$} (7);
+\end{tikzpicture}
+\end{center}
+
+Where, as per our union find data structure, vertices 2 and 4 share an edge 
+with vertex 3, vertex 5 shares an edge with vertex 6, who in turn shares an 
+edge with vertex 7. And finally, vertex 3 and vertex 7 each share an edge 
+with vertex 1.
 % ============================================
 
 \nextprob
@@ -64,7 +285,51 @@ Chapter 3, Question 9 (Palindromes)
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item In my own words, the problem is, given a string as input,
+		to find the longest substring within that string which
+		is also a palindrome. That is, find the longest substring
+		which is identical when read forwards to when it is read 
+		backwards. As output, we return the length of this longest
+		possible palindromic substring.
+	\item To solve this problem, I propose a recursive solution in which
+		we either return 0 if the length of the string is zero, or we
+		return 1 if the length of the string is 1, and otherwise
+		we recurse. Specifically, if the value at the first index of 
+		the string is equivalent to the value at the last index of
+		the string, we return a value of two added to the resulting
+		value of the recursion on the substring moving further in a
+		letter on both the start and end points. If the endpoints
+		of the currently considered string are not identical, then 
+		we carry out two recursions. Namely, we move forward a letter
+		from the beginning of the string, and we move inward a letter
+		from the end of the string, each in a different recursion. 
+		The algorithm then will keep recursing until it reaches one
+		of the base cases, and will return an integer value for the 
+		longest palindromic substring. 
+
+		If we consider this in a dynamic programming context, its
+		helpful to think about the resulting matrix of all
+		of these recursive computations. For a string of length $n$,
+		intuitively we find the solution in the matrix entry $0,n$,
+		as this is the entry summarizing the result when considering
+		the entire string. If we examine the resulting matrix in
+		terms of dependencies, this solution entry is dependent on
+		either the max of the adjacent entries, or if the two ends of
+		the string are equivalent, the solution entry is dependent
+		on the max of adjacent entries plus 2. Indeed, this is
+		embedded in our provided recursive algorithm, so inherently
+		our program is dynamic.
+	\item 
+		\begin{algorithm}
+			\begin{algorithmic}
+				\caption{\textsc{LongestPalindrome}}
+				\STATE \texfbf{Input:} 
+			\end{algorithmic}
+		\end{algorithm}
+ 
+		
+\end{enumerate}
 
 % ============================================
 
