@@ -301,9 +301,10 @@ Chapter 3, Question 9 (Palindromes)
 		value of the recursion on the substring moving further in a
 		letter on both the start and end points. If the endpoints
 		of the currently considered string are not identical, then 
-		we carry out two recursions. Namely, we move forward a letter
-		from the beginning of the string, and we move inward a letter
-		from the end of the string, each in a different recursion. 
+		we carry out two recursions. Namely, we either both move forward a letter
+		from the beginning of the current string and also move inward a letter
+		from the end of the string, or we just move inward a letter from the end of
+		the string, each of these possibilities happening in a different recursion. 
 		The algorithm then will keep recursing until it reaches one
 		of the base cases, and will return an integer value for the 
 		longest palindromic substring. 
@@ -324,9 +325,68 @@ Chapter 3, Question 9 (Palindromes)
 		\begin{algorithm}
 			\begin{algorithmic}
 				\caption{\textsc{LongestPalindrome}}
-				\STATE \texfbf{Input:} 
+				\State \textbf{Input:} String $S$, start index $i$, length $l$
+				\State \textbf{Output:} Integer representative of the longest palindromic substring of $S$
+				\If{$l == 1$}
+				\State \Return 1
+				\EndIf
+				\If{$l == 0$}
+				\State \Return 0
+				\EndIf
+				\If{$S[i] == S[i + l]$}
+				\State \Return $2 + \textsc{LongestPalindrome}(S,i + 1, l-2)$
+				\Else
+				\State \Return $max(\textsc{LongestPalindrome}(S,i + 1, l-1),\textsc{LongestPalindrome}(S,i, l-1))$
+				\EndIf
 			\end{algorithmic}
 		\end{algorithm}
+
+	\item Let's provide a decrementing function. Consider the map $f: S \rightarrow \mathbb{N}$ 
+		defined by the length of $S$ subtracting one (but since this is a map to the natural numbers, including zero,
+		we just define $0-1$ as still $0$). Then indeed, as any possible outcome of the recursion, we either have
+		in the base cases that $f$ provides $l-1 = 0$ for $l=1$ or $l-1 = 0$ because of our definition of the operation
+		when $l=0$. In any other case, $f$ decreases, either by one or by two for the next recursion. Meaning that indeed,
+		$f$ decrements, and necessarily must reach $0$. Since we've shown $f$ decrements, we've proven that the algorithm
+		terminates.
+	
+	\item Prove partial correctness:
+		To do so, we need to prove the loop invariant. 
+		\textit{Claim:} The loop invariant is the property that, of all of the elements outside of the range of the current
+		string we're considering on any given iteration, we've returned the number of possible palindromes outside of
+		our currently considered substring.
+		\begin{proof}
+			We need to show three things. These are the initialization step, the loop maintenance step, and a
+			meaningful implication for the algorithm upon termination of the recursion.
+			\begin{enumerate}
+				\item First off, the initialization step. We know this must be true somewhat trivially, since
+					upon entering the recursion we are considering the entire string. This implies that
+					indeed, every element outside of the string we're currently considering has already
+					returned the number of letters which contribute to the palindrome, since no return 
+					statements have yet been able to occur.
+				\item Next, upon entering the recursion for an arbitrary step, if the first and last items 
+					in our currently considered string are equivalent, we return 2 added to the next recursion.
+					Now considering these end letters as outside of the currently considered string, indeed
+					we've kept track of the total number of letters contributing to the palindrome in for the
+					case of identical endpoints. For the case of nonidentical endpoints, we choose the max of
+					recursing on the substring moving in from both the front and end of the currently considered
+					substring, or the substring resulting from moving in only from the end of the current substring.
+					Because every letter outside of the current substring must've gone through this process depending on
+					the case it fell into, we must've added it previously to the total added to the recursion. Meaning
+					that no matter what, upon entering and upon termination of any arbitrary iteration of the recursion,
+					the loop invariant must continue to be true.
+				\item Finally, upon termination of the recursion, we reach the base cases. Either no string is remaining, 
+					or a string of length 1 is remaining. For a remaining empty string we return 0, for a remaining 
+					string containing one letter, we return 1. This means that either we've gained a palindrome with
+					evenly many letters in the case of a final string of length 0, or a palindrome with odd length in the
+					case of a final string of length 1. This means that we either can add an arbitrary middle letter to
+					the palindrome, or we can't. And indeed, since the loop maintenance step holds, we've gained on
+					termination of the loop the total length of the current palindrome we're keeping track of, which is
+					the longest palindrome possible outside of the substring currently being considered, which is
+					importantly the longest possible palindrome out of the entire string.
+			\end{enumerate}
+			Thus, by showing the three steps necessary in a loop invariant, we've proven the loop invariant, and as a result,
+			we've proven partial correctness.
+		\end{proof}
  
 		
 \end{enumerate}
@@ -342,8 +402,34 @@ Chapter 7, Question 1 (Shortest and Longest Edges in Cycle)
 
 % ============================================
 
-TODO: your answer goes between these lines
-
+\begin{enumerate}
+	\item \textit{Claim:} For any cycle in a graph $G$, the minimum spanning tree of $G$ excludes
+		the maximum weighted edge in that cycle.
+		\begin{proof}
+			Consider any arbitrary cycle $C(V,E) \subset G$. The MST of $G$ must include
+			every vertex of $C$. Because every vertex in $C$ must be at least degree 2, there
+			must be two possible edges to reach any vertex. Therefore, if one of the edges happens
+			to be the maximum weighted edge, necessarily the vertex in question is reachable by an
+			edge which has a smaller weight. Since all vertices in $C$ must be in the MST, all must be
+			reached, and importantly all other vertices must be reachable by weights smaller than the maximal
+			weight. Meaning that necessarily, since all neighbors of the vertex in question are viable to
+			reach with a smaller weight than the maximal weight, the MST must include either the maximum weight
+			to get to a vertex it's adjacent to, or a smaller weighted edge. By definition the MST will always
+			choose the lesser weighted edge. And thus, the MST excludes the maximum weighted edge in a cycle,
+			for any arbitrary cycle in a graph.
+		\end{proof}
+	\item \textit{Claim:} The minimum spanning tree of $G$ includes the minimum-weight edge in every cycle in $G$.
+		\begin{proof}
+			Some vertex in $G$ must be reachable by the mimimal edge, and the MST must reach every edge in $G$.
+			Considering Kruskal's algorithm, which has been proven correct plenty of times, the smallest weighted
+			edge on any given iteration is chosen to be included in the MST. Eventually, the minimal edge in the
+			arbitrary cycle must be reached by Kruskal's algorithm, and necessarily before any other edge neighboring
+			a particular vertex. Since all vertices must be included in the MST, this vertex must be included in the current
+			graph on the iteration of Kruskal's algorithm when this minimal edge is considered. And, importantly, on said
+			iteration, necessarily this minimal edge will be included in the MST. Proving the claim that necessarily
+			any minimum-weight edge in an arbitrary cycle will be included in the minimum spanning tree of a graph $G$.
+		\end{proof}
+\end{enumerate}
 % ============================================
 
 
@@ -355,8 +441,93 @@ Chapter 8, Question 3 (Weights on Vertices)
 \paragraph{Answer}
 
 % ============================================
+\begin{enumerate}
+	\item 
+		\begin{enumerate}
+			\item The first part of the problem is asking for an algorithm which can compute the MST given
+				only weights on the vertices. As input, we have a weighted undirected graph with weights
+				on the vertices, and as output we want to return the tree which minimizes the weights on
+				any given vertex, while also including every vertex. This problem is a bit trivial, since
+				the minimum spanning tree needs to be a \textit{spanning} tree, and must contain every vertex.
+				So, the minimum spanning tree will always have the same total weight, and there may be multiple for
+				any graph of this form. Most importantly, essentially the question is only asking for a spanning
+				tree given a graph.
+			\item In prose, an algorithm to solve this somewhat trivial problem is as follows. Assign each edge a weight of
+				$0$, or for that matter any number you can think of so long as each edge has the same weight. Then run
+				Kruskal's algorithm on the graph. As output, we gain an arbitrary spanning tree, which necessarily will
+				satisfy the desired output, because as long as it contains every vertex, it counts as minimal.
+			\item Formally:
+		\begin{algorithm}
+			\begin{algorithmic}
+				\caption{\textsc{Trivial}}
+				\State \textbf{Input:} A graph $G(V,E)$ with weighted vertices
+				\State \textbf{Output:} A spanning tree $T$ which minimizes the weights of vertices in the output
+				\State Weight each edge in $E$ of $G$ with the number $0$, disregard all weights of $V$
+				\State $T \gets \textsc{Kruskal'sAlgorithm}(G)$
+				\State \Return $T$
+			\end{algorithmic}
+		\end{algorithm}
 
-TODO: your answer goes between these lines
+	\item Next, we show the runtime of \textsc{Trivial}. \textsc{Trivial} has the same runtime as \textsc{Kruskal'sAlgorithm}, plus a
+		$\Theta(E)$ operation and a $\Theta(V)$ operation. Thus, the runtime of \textsc{Trivial} is just the same runtime as 
+				\textsc{Kruskal'sAlgorithm}, which is either $O(ElogE)$ or $O(ElogV)$, depending on which is larger
+				between $V$ and $E$. However, since we're bounded clearly by \textsc{Kruskal'sAlgorithm}, we've certainly
+				guaranteed termination, since no other operations occur which weren't already mentioned except for constant
+				time operations.
+	\item Finally, to show partial correctness of \textsc{Trivial}, all we really need to do is show that the already
+		proven \textsc{Kruskal'sAlgorithm} provides an output which is satisfactory for our purposes. Indeed, since all
+		vertices must be reached in order to have a MST, any arbitrary spanning tree is sufficient for the problem. 
+		\textsc{Kruskal'sAlgorithm} definitely provides this. Thus, \textsc{Trivial} is correct, as no other loops exist
+		in the algorithm.
+		\end{enumerate}
+
+	\item \begin{enumerate}
+			\item For the second problem, we're actually asked to do something nontrivial. Namely, we need to find a path
+				in a graph $G$ from one given vertex $s$ to another vertex $t$, minimizing the weight it takes to travel
+				the path. Again, in this context, weights are assigned on the vertices. As input, we take in $G$, with
+				weights on the vertices, and two vertices $s$ and $t$. As output, we return a path from $s$ to $t$ which
+				minimizes the total weights on all vertices on the path. 
+			\item Taking in a graph $G(V,E)$ and two vertices $s$ and $t$ as input, we provide as output the path $P(V'E')$ 
+				with the minimal total weight from $s$ to $t$. My proposed algorithm modifies Dijkstra's algorithm 
+				by considering at any given vertex, edge weights equal
+				to the values assigned to each neighboring vertex with which the edge is shared. In this way, we are able to
+				run Dijkstra's algorithm as it normally would be run by first just considering instead of the neighboring
+				edge weights, the neighboring vertex weights. In doing so, we've equivalently just assigned each neighboring
+				edge to the same value as the neighboring vertex the edge goes to. This will give us the minimal path from
+				two vertices, as the problem in effect may be equivalently stated by weighting each outgoing edge from a
+				current vertex with the weight assigned to the next incoming vertex for that edge. This is done by assigning
+				a parametric function to each of the edges, where the function $f$ is defined 
+				$f(e) = weight(v')$ where $e$ is any edge between vertices $v$ and $v'$ and for a currently 
+				considered vertex $v$, $v'$ is the vertex sharing $e$. Then, utilizing $f$ to determine the edge weights of 
+				$G$, we simply run Dijkstra's algorithm.
+			\item Formally, this is as follows:
+
+		\begin{algorithm}
+			\begin{algorithmic}
+				\caption{\textsc{BasicallyDijkstra}}
+				\State \textbf{Input:} A graph $G(V,E)$ with weighted vertices, a source $s$, and a sink $t$
+				\State \textbf{Output:} A path $P$ from $s$ to $t$ with minimal weight
+				\State Define the weights of $E$ according to $f$
+				\State $P \gets \textsc{Dijkstra'sAlgorithm}(G(V,E), s, t)$ where $E$ is dynamically weighted by $f$
+				\State \Return $P$
+			\end{algorithmic}
+		\end{algorithm}
+			\item Our algorithm adds a constant time operation for every iteration within Dijkstra's algorithm, modifying
+				the runtime of the main loop from $O(VlogV)$ to $O(2VlogV)$ which is still just $O(VlogV)$, making the
+				runtime of the overall algorithm still the same as normal Dijkstra's algorithm, which is $O(VlogV + ElogV)$.
+				Since we've provided a runtime, indeed we've proven termination.
+			\item As with the last problem, proving a loop invariant here doesn't seem particularly necessary, as Dijkstra's
+				is an algorithm well known to be correct. So instead, assume Dijkstra's algorithm is correct, and let's show
+				that it's output in our context is correct for our problem. Running Dijkstra's algorithm using a graph with
+				edge weights as defined by $f$ necessitates that, when a vertex is reached, every edge coming from this
+				vertex corresponds to the weight of the other vertex sharing the edge. This necessitates that our modified
+				Dijkstra's algorithm considers how much adding a neighboring \textit{vertex} will add to the total cost of 
+				a path. Thus, we gain at each iteration of Dijkstra's algorithm, the current path which has only added the 
+				minimal possible vertices. Indeed then, our output is necessarily correct, as the minimal path of vertices 
+				is exactly what's required in the prompt. 
+	\end{enumerate}
+
+\end{enumerate}
 
 % ============================================
 
@@ -379,7 +550,38 @@ Describe a ``real-life'' problem that can be modeled as:
 
 % ============================================
 
-TODO: your answer goes between these lines
+\begin{enumerate}
+	\item Consider a graph of things a person in quarantine can do. Each of these things could take the form of a vertex, each
+		with edges representative of other tasks that thing makes someone want to do. Doing one thing for this model is
+		mutually encouraging to do that other thing. For instance, we could have a graph with three vertices, which are sleeping,
+		watching TV, and doing homework. Homework makes you want to watch TV, watching TV makes you want to do homework. So the two
+		vertices share an edge. Watching TV also makes you want to sleep, and sleeping makes you want to watch TV, so the two also
+		share an edge. It's not the greatest example but it works.
+	\item Consider patient zero in Bozeman, MT with Covid-19 as a vertex. Now consider everyone they came into contact
+		with while having Covid-$19$ as vertices each connected by a directed edge to patient zero, with a weight corresponding
+		to how likely they were to end up also getting Covid-$19$ from patient zero based on their level of exposure. 
+		Now consider all of the
+		people these contacts came into contact with as vertices connected by directed, weighted edges to each of these contacts. 
+		Keep repeating
+		this for every patient of Covid-$19$ in Bozeman. You get the idea, welcome to our grim reality. 
+		Eventually, an edge connects to a vertex representing
+		the author, the one and only, recently not contagious Ben Holmgren. Thankfully, there are no outgoing edges from his vertex.
+		Nice job quarantining, Ben!
+	\item Consider the first covid-19 virus particle to reach my body. Make this the root of the tree. Now consider all of its children.
+		Add edges to them from the root. Now all of its children's children. And it's children's children's children. You get the
+		idea. As the virus multiplies, we track each organism in a tree. Lovely.
+	\item Consider as a root of a tree, the first time a person anywhere thought about how much they hope Covid-$19$ goes away soon.
+		Then consider the next time they had the same thought as a subsequent vertex. Add an edge between the two to show their
+		relationship in time. Then add an edge between the subsequent vertex and the next time thereafter that this person had the
+		same inevitably thought along the lines of ``AAAAAAAA I want this to end." Keep adding edges between the times this person
+		really wanted to just see people normally again. This isn't an especially exciting tree, it's just a line between events in
+		time. But it's the world we live in. Now consider this kind of tree for every person who has ever thought about how much
+		they want Covid-$19$ to go away forever. Wow, that's a lot of trees! That's something some people might even call... a forest.
+		
+\end{enumerate}
+	There might've been a theme to this exercise. You should know that I, and everyone else who got the coronavirus around the same time I did
+		are all doing fine now and recovering well. But it wasn't fun, and we're all not fully $100\%$ functional again. So stay healthy,
+		stay safe, and look out for the people around you!!
 % ============================================
 
 
